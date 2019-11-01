@@ -9,31 +9,23 @@ using namespace std;
 
 class Matrix {
 private:
-	double** matrix;
-public:
+	double** values;
+
 	const uint numberOfRows;
 	const uint numberOfColumns;
-
-	Matrix(int numberOfRows = 0, int numberOfColumns = 0);
+public:
+	Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U);
 
 	uint getNumberOfRows() const;
 	uint getNumberOfColumns() const;
 
 	double getValue(uint rowNumber, uint columnNumber) const;
-	void setValue(uint rowNumber, uint columnNumber);
+	void setValue(uint rowNumber, uint columnNumber, double value);
 
-	const double* getHorizontalVector(uint numberOfRow) const;
-	const double* getVerticalVector(uint numberOfColumn) const;
+	const double* getRowVector(uint numberOfRow) const;
+	const double* getColumnVector(uint numberOfColumn) const;
 
-	~Matrix()
-	{
-		for (uint rowNumber = 0; rowNumber < numberOfRows; rowNumber++)
-		{
-			delete [] matrix[rowNumber];
-		}
-		delete [] matrix;
-		delete matrix;
-	}
+	~Matrix();
 };
 
 #endif // MATRIX_H
