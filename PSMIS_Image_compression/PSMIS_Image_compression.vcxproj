@@ -154,6 +154,7 @@
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="PSMIS_Image_compression.cpp" />
+    <ClCompile Include="rectangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="matrix.h" />

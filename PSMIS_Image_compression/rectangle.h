@@ -15,7 +15,7 @@ private:
 	uint startX;
 	uint startY;
 public:
-	Rectangle(uint startX = 0, uint startY = 0, uint width = 0, uint height = 0);
+	Rectangle(uint startX = 0U, uint startY = 0U, uint width = 0U, uint height = 0U);
 
 	uint getWidth() const;
 	uint getHeight() const;
@@ -29,16 +29,9 @@ class ImageSnippet : Rectangle
 private:
 	Matrix* pixels;
 public:
-	ImageSnippet(uint startX, uint startY, uint width, uint height) 
-		: Rectangle(startX, startY, width, height) 
-	{
-		pixels = new Matrix(height, width);
-	}
+	ImageSnippet(uint startX, uint startY, uint width, uint height);
 
-	~ImageSnippet()
-	{
-		delete pixels;
-	}
+	~ImageSnippet();
 };
 
 #endif // RECTANGLE_H
