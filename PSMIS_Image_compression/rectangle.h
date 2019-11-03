@@ -35,7 +35,10 @@ private:
 	vector<double> pixels;
 	Matrix* x0;
 public:
-	ImageSnippet(uint startX, uint startY, uint width, uint height);
+	ImageSnippet(
+		uint startX = 0U, uint startY = 0U, 
+		uint width = 0U, uint height = 0U
+	);
 	
 	int restoreColor(double color);
 	double transformColor(double color);

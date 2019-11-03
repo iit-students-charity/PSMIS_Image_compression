@@ -3,7 +3,7 @@
 #include "matrix.h"
 
 Matrix::Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U)
-	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns)
+	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns) // not nedeed?
 {
 	values = new double*[numberOfRows];
 	for (int i = 0; i < numberOfRows; ++i)
@@ -15,6 +15,11 @@ Matrix::Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U)
 Matrix::Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U)
 	: Matrix(numberOfRows, numberOfColumns)
 {
+	/*for (int r = 0; r < row; r++) {
+		if (matrix[r].length != column) {
+			throw new IllegalArgumentException("Different rows' length.");
+		}
+	}*/
 	this->values = values;
 }
 

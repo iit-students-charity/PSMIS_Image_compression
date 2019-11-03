@@ -151,12 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="image.cpp" />
     <ClCompile Include="matrix.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="PSMIS_Image_compression.cpp" />
     <ClCompile Include="rectangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Image.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="rectangle.h" />
