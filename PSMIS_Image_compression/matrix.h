@@ -15,6 +15,7 @@ private:
 	const uint numberOfColumns;
 public:
 	Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U);
+	Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U);
 
 	uint getNumberOfRows() const;
 	uint getNumberOfColumns() const;

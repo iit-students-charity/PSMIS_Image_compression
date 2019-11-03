@@ -3,8 +3,12 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#include <vector>
+#include <CImg.h>
+
 #include "util.h"
 #include "matrix.h"
+
 
 class Rectangle 
 {
@@ -27,9 +31,19 @@ public:
 class ImageSnippet : Rectangle 
 {
 private:
-	Matrix* pixels;
+	//double* pixels;
+	vector<double> pixels;
+	Matrix* x0;
 public:
 	ImageSnippet(uint startX, uint startY, uint width, uint height);
+	
+	int restoreColor(double color);
+	double transformColor(double color);
+
+	void addPixel(double red, double green, double blue);
+	void add();
+
+	void createX0();
 
 	~ImageSnippet();
 };

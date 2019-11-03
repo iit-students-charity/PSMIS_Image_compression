@@ -12,6 +12,12 @@ Matrix::Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U)
 	}
 }
 
+Matrix::Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U)
+	: Matrix(numberOfRows, numberOfColumns)
+{
+	this->values = values;
+}
+
 uint Matrix::getNumberOfRows() const
 {
 	return numberOfRows;
