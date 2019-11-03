@@ -13,6 +13,7 @@ private:
 
 	const uint numberOfRows;
 	const uint numberOfColumns;
+	static double** initRandom(uint numberOfRows = 0U, uint numberOfColumns = 0U);
 public:
 	Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U);
 	Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U);
@@ -25,6 +26,13 @@ public:
 
 	const double* getRowVector(uint numberOfRow) const;
 	const double* getColumnVector(uint numberOfColumn) const;
+
+	double** transposeValues();
+	Matrix* multiply(double number);
+
+	static bool sizecmp(Matrix a, Matrix b);
+	static Matrix* subtract(Matrix a, Matrix b);
+	static Matrix* multiply(Matrix a, Matrix b);
 
 	~Matrix();
 };
