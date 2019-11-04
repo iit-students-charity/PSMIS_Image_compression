@@ -1,6 +1,13 @@
 ﻿#include <iostream>
 
+#include "util.h"
+
+
 int main()
 {
-    std::cout << "Hello World!\n";
+	uint p;
+	uint n;
+	uint m;
+
+	std::cout << "";
 }

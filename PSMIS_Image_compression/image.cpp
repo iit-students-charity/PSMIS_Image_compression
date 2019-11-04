@@ -2,43 +2,71 @@
 
 #include "Image.h"
 #include "util.h"
-#include "rectangle.h"
 
 
-void Image::initSnippets() {
-	uint x = 0;
+Image::Image()
+{
+	image = new cimg_library::CImg<uchar>();
+	snippets = nullptr;
+
+	compressionIterationNumber = 0;
+}
+
+void Image::load(const char* path)
+{
+	image->load(path);
+}
+
+void Image::save()
+{
+	image->save(path, ++compressionIterationNumber, 1);
+}
+
+void Image::initSnippets()
+{
+	int x = 0;
+	int y = 0;
 	snippets = new ImageSnippet[tempWidth * tempHeight];
 
-	for (int i = 0; i < tempWidth; i++)
+	for (int w = 0; w < tempWidth; w++)
 	{
-		uint y = 0;
-		for (int j = 0; j < tempHeight; j++)
+		for (int h = 0; h < tempHeight; h++)
 		{
-			ImageSnippet snippet(x, y);
+			ImageSnippet snippet(x, y, n, m);
 
 			for (int widthIndex = 0; widthIndex < m; widthIndex++)
 			{
 				for (int heightIndex = 0; heightIndex < n; heightIndex++)
 				{
-					if (widthIndex < image.width() && heightIndex < image.height())
+					if (widthIndex < image->width() && heightIndex < image->height())
 					{
-						uint x = widthIndex + x;
-						uint y = heightIndex + y;
-						snippet.addPixel(image(x, y, 0, 0), image(x, y, 0, 1), image(x, y, 0, 2));
+						int currX = widthIndex + x;
+						int currY = heightIndex + y;
+						snippet.addPixel(
+							(*image)(currX, currY, 0, 0),
+							(*image)(currX, currY, 0, 1),
+							(*image)(currX, currY, 0, 2)
+						);
 					}
 					else
 					{
-						snippet.add();
-						snippet.add();
-						snippet.add();
+						snippet.addPixel(-1., -1., -1.);
 					}
 				}
 			}
 			y += n;
 
 			snippet.createX0();
-			snippets[i * 10 + j] = snippet;
+			snippets[w * 10 + h] = snippet;
 		}
 		x += m;
 	}
+}
+
+Image::~Image()
+{
+	delete image;
+	delete[] snippets;
+
+	delete[] path;
 }

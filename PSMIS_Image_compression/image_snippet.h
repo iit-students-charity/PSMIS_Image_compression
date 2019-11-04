@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef IMAGE_SNIPPET_H
+#define IMAGE_SNIPPET_H
 
 #include <vector>
 #include <CImg.h>
@@ -10,27 +10,15 @@
 #include "matrix.h"
 
 
-class Rectangle 
+class ImageSnippet
 {
-private:	
+private:
 	uint width;
 	uint height;
 
 	uint startX;
 	uint startY;
-public:
-	Rectangle(uint startX = 0U, uint startY = 0U, uint width = 0U, uint height = 0U);
 
-	uint getWidth() const;
-	uint getHeight() const;
-
-	uint getStartX() const;
-	uint getStartY() const;
-};
-
-class ImageSnippet : Rectangle 
-{
-private:
 	//double* pixels;
 	vector<double> pixels;
 	Matrix* x0;
@@ -39,16 +27,21 @@ public:
 		uint startX = 0U, uint startY = 0U, 
 		uint width = 0U, uint height = 0U
 	);
+
+	uint getWidth() const;
+	uint getHeight() const;
+
+	uint getStartX() const;
+	uint getStartY() const;
 	
 	int restoreColor(double color);
 	double transformColor(double color);
 
 	void addPixel(double red, double green, double blue);
-	void add();
 
 	void createX0();
 
 	~ImageSnippet();
 };
 
-#endif // RECTANGLE_H
+#endif // IMAGE_SNIPPET_H

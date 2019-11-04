@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 
-Matrix::Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U)
+Matrix::Matrix(uint numberOfRows, uint numberOfColumns)
 	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns) // not nedeed?
 {
 	values = new double*[numberOfRows];
@@ -16,7 +16,7 @@ Matrix::Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U)
 	}
 }
 
-Matrix::Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U)
+Matrix::Matrix(double** values, uint numberOfRows, uint numberOfColumns)
 	: Matrix(numberOfRows, numberOfColumns)
 {
 	/*for (int r = 0; r < row; r++) {
@@ -66,12 +66,12 @@ bool Matrix::sizecmp(Matrix a, Matrix b)
 }
 
 
-double** Matrix::initRandom(uint numberOfRows = 0U, uint numberOfColumns = 0U)
+double** Matrix::initRandom(uint numberOfRows, uint numberOfColumns)
 {
 	double** values = new double*[numberOfRows];
 
 	srand(time(0));
-	uint multiplier = 1000000;
+	int multiplier = 1000000;
 
 	for (int row = 0; row < numberOfRows; row++)
 	{
@@ -88,7 +88,6 @@ double** Matrix::initRandom(uint numberOfRows = 0U, uint numberOfColumns = 0U)
 
 double** Matrix::transposeValues() {
 	double** newValues = new double*[numberOfColumns];
-	const double** oldValues = values;
 
 	for (int row = 0; row < numberOfColumns; row++)
 	{
@@ -98,7 +97,7 @@ double** Matrix::transposeValues() {
 	{
 		for (int col = 0; col < numberOfColumns; col++)
 		{
-			newValues[col][row] = oldValues[row][col];
+			newValues[col][row] = values[row][col];
 		}
 	}
 

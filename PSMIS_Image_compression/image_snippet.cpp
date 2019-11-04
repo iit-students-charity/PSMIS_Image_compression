@@ -1,47 +1,33 @@
 #include <vector>
 #include <CImg.h>
 
-#include "rectangle.h"
-
-
-Rectangle::Rectangle(uint startX = 0U, uint startY = 0U, uint width = 0U, uint height = 0U)
-	: width(width), height(height), startX(startX), startY(startY)
-{ }
-
-uint Rectangle::getWidth() const
-{
-	return width;
-}
-
-uint Rectangle::getHeight() const
-{
-	return height;
-}
-
-uint Rectangle::getStartX() const
-{
-	return startX;
-}
-
-uint Rectangle::getStartY() const
-{
-	return startY;
-}
-
+#include "image_snippet.h"
 
 
 ImageSnippet::ImageSnippet(uint startX, uint startY, uint width, uint height)
-	: Rectangle(startX, startY, width, height)
+	: width(width), height(height), startX(startX), startY(startY)
 {
 	x0 = new Matrix(height, width);
 }
 
-ImageSnippet::~ImageSnippet()
+uint ImageSnippet::getWidth() const
 {
-	/*delete [] pixels;
-	delete pixels;*/
+	return width;
+}
 
-	delete x0;
+uint ImageSnippet::getHeight() const
+{
+	return height;
+}
+
+uint ImageSnippet::getStartX() const
+{
+	return startX;
+}
+
+uint ImageSnippet::getStartY() const
+{
+	return startY;
 }
 
 int ImageSnippet::restoreColor(double color) {
@@ -62,11 +48,6 @@ void ImageSnippet::addPixel(double red, double green, double blue)
 	pixels.push_back(blue);
 }
 
-void ImageSnippet::add()
-{
-	pixels.push_back(-1.0);
-}
-
 void ImageSnippet::createX0()
 {
 	uint numberOfRows = 1;
@@ -80,4 +61,12 @@ void ImageSnippet::createX0()
 
 	delete x0;
 	x0 = new Matrix(valuesVector, numberOfRows, numberOfColumns);
+}
+
+ImageSnippet::~ImageSnippet()
+{
+	/*delete [] pixels;
+	delete pixels;*/
+
+	delete x0;
 }
