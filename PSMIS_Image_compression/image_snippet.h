@@ -33,6 +33,8 @@ public:
 
 	uint getStartX() const;
 	uint getStartY() const;
+
+	Matrix* getX0() const;
 	
 	int restoreColor(double color);
 	double transformColor(double color);

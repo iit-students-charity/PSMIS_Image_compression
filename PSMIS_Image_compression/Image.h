@@ -33,6 +33,12 @@ public:
 	uint getP() const;
 	uint getTempWidth() const;
 	uint getTempHeight() const;
+	ImageSnippet* getSnippets() const;
+	
+	uint getSnippetsNumber() const;
+	uint getWidth() const;
+	uint getHeight() const;
+	void setColor(uint x, uint y, int* color);
 
 	void load(const char* path);
 	void save();

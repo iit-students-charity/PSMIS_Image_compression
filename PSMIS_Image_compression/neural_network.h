@@ -24,45 +24,8 @@ private:
 	Matrix* W_;
 
 	Image* inputImage;
-public:
-	NeuralNetwork(Image* image, double e);
 
-	void run();
-
-	private void restoreImage(Image imageToRestore) {
-		var image = imageToRestore.getInputImage();
-
-		var rectangles = imageToRestore.getRectangles();
-		var rectangleWidth = imageToRestore.getM();
-		var rectangleHeight = imageToRestore.getN();
-		var restoredImage = new BufferedImage(image.getWidth(), image.getHeight(), TYPE_3BYTE_BGR);
-
-		for (var rectangle : rectangles) {
-			X = rectangle.getX0();
-			Y = multiply(X, W);
-			X_ = multiply(Y, W_);
-
-			var x = rectangle.getX();
-			var y = rectangle.getY();
-			var pixelPosition = 0;
-
-			for (int i = 0; i < rectangleWidth; i++) {
-				for (int j = 0; j < rectangleHeight; j++) {
-					var red = rectangle.restorePixel(X_.getMatrix()[0][pixelPosition++]);
-					var green = rectangle.restorePixel(X_.getMatrix()[0][pixelPosition++]);
-					var blue = rectangle.restorePixel(X_.getMatrix()[0][pixelPosition++]);
-
-					var color = new Color(red, green, blue);
-					if (x + i < image.getWidth()) {
-						if (y + j < image.getHeight()) {
-							restoredImage.setRGB(x + i, y + j, color.getRGB());
-						}
-					}
-				}
-			}
-		}
-		saveImage(restoredImage);
-	}
+	void restoreImage(); 
 
 	private int compressImage(Image image) {
 		W = new Matrix(init(N, image.getP()));
@@ -94,6 +57,10 @@ public:
 		}
 		return iteration;
 	}
+public:
+	NeuralNetwork(Image* image, double e);
+
+	void run();
 };
 
 #endif // NEURAL_NETWORK_H
