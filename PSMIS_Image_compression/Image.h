@@ -16,16 +16,23 @@ private:
 	uint n;
 	uint m;
 
-	uint tempHeight = 1;
-	uint tempWidth = 1;
+	uint tempHeight;
+	uint tempWidth;
 
 	cimg_library::CImg<uchar>* image;
 	ImageSnippet* snippets;
 
-	const char* path = "\\src\\1.png";
+	char* path;
 	uint compressionIterationNumber = 0;
 public:
-	Image();
+	Image(uint p, uint n, uint m);
+	Image(uint p, uint n, uint m, const char* path);
+
+	uint getN() const;
+	uint getM() const;
+	uint getP() const;
+	uint getTempWidth() const;
+	uint getTempHeight() const;
 
 	void load(const char* path);
 	void save();

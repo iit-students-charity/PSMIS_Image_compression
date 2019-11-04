@@ -22,48 +22,12 @@ private:
 	Matrix* Y;
 	Matrix* W;
 	Matrix* W_;
+
+	Image* inputImage;
 public:
-	NeuralNetwork(const char* inputImagePath, uint m, uint n, int p, int e);
+	NeuralNetwork(Image* image, double e);
 
-	void start() {
-		var scanner = new Scanner(System.in, UTF_8);
-		System.out.println("Choose image to compress: 1.Fire, 2.Lizard, 3.Photographer");
-		var choice = scanner.nextInt();
-		var imageToProcess = openImage(choice);
-
-		var image = new Image();
-		image.setInputImage(imageToProcess);
-
-		System.out.println("Input m (rectangle width):");
-		image.setM(scanner.nextInt());
-		image.setTempWidth(imageToProcess.getWidth() / image.getM());
-
-		System.out.println("Input n (rectangle height):");
-		image.setN(scanner.nextInt());
-		image.setTempHeight(imageToProcess.getHeight() / image.getN());
-
-		N = image.getN() * image.getM() * RGB;
-		System.out.println(String.format("Input p (<= %d):", N / 2));
-		image.setP(scanner.nextInt());
-
-		System.out.println(String.format("Input e (<= %f):", 0.1 * image.getP()));
-		e = scanner.nextDouble();
-
-		var tempWidth = imageToProcess.getWidth() / image.getM();
-		var tempHeight = imageToProcess.getHeight() / image.getN();
-
-		image.setTempHeight(tempHeight);
-		image.setTempWidth(tempWidth);
-
-		var L = tempHeight * tempWidth;
-		var Z = (double)(N * L) / ((N + L) * image.getP() + 2);
-
-		image.initRectangles();
-		var I = compressImage(image);
-		restoreImage(image);
-
-		System.out.println(String.format("L: %d. Z: %f. I: %d. Adaptive step: %f", L, Z, I, adaptiveStep));
-	}
+	void run();
 
 	private void restoreImage(Image imageToRestore) {
 		var image = imageToRestore.getInputImage();

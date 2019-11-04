@@ -4,12 +4,27 @@
 #include "util.h"
 
 
-Image::Image()
+Image::Image(uint p, uint n, uint m)
 {
+	this->p = p;
+	this->n = n;
+	this->m = m;
+
 	image = new cimg_library::CImg<uchar>();
+	path = nullptr;
+	tempHeight = tempWidth = 0;
 	snippets = nullptr;
 
 	compressionIterationNumber = 0;
+}
+
+Image::Image(uint p, uint n, uint m, const char* path) : Image(p, n, m)
+{
+	this->path = (char*)path;
+	load(path);
+
+	tempWidth = image->width() / m;
+	tempHeight = image->height() / n;
 }
 
 void Image::load(const char* path)
@@ -24,9 +39,9 @@ void Image::save()
 
 void Image::initSnippets()
 {
+	snippets = new ImageSnippet[tempWidth * tempHeight];
 	int x = 0;
 	int y = 0;
-	snippets = new ImageSnippet[tempWidth * tempHeight];
 
 	for (int w = 0; w < tempWidth; w++)
 	{
