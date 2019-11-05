@@ -7,13 +7,28 @@
 
 int main()
 {
-	const char* imagePath;
+	const char* imagePath = nullptr;
 	uint choise;
 	do
 	{
 		std::cout << "Choose an image: \n1. Girl\n2. Flower\n3. Fight";
 		std::cin >> choise;
-		imagePath = getImagePath(choise);
+
+		switch (choise)
+		{
+		case 1:
+		{
+			imagePath = "\\src\\girl.png";
+		}
+		case 2:
+		{
+			imagePath = "\\src\\flower.png";
+		}
+		case 3:
+		{
+			imagePath = "\\src\\fight.png";
+		}
+		}
 
 		if (imagePath == nullptr)
 		{
@@ -43,28 +58,6 @@ int main()
 
 	Image* image = new Image(p, n, m, imagePath);
 	NeuralNetwork* nn = new NeuralNetwork(image, e);
-	
 
 	nn->run();
-}
-
-const char* getImagePath(uint choise)
-{
-	switch (choise)
-	{
-	case 1:
-	{
-		return "\\src\\girl.png";
-	}
-	case 2:
-	{
-		return "\\src\\flower.png";
-	}
-	case 3:
-	{
-		return "\\src\\fight.png";
-	}
-	default:
-		return nullptr;
-	}
 }

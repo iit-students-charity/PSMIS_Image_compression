@@ -53,10 +53,10 @@ const double* Matrix::getColumnVector(uint numberOfColumn) const
 	return nullptr;
 }
 
-bool Matrix::sizecmp(Matrix a, Matrix b) 
+bool Matrix::sizecmp(Matrix* a, Matrix* b) 
 {
-	return (b.getNumberOfRows() != a.getNumberOfRows())
-		|| (b.getNumberOfColumns() != (a.getNumberOfColumns())) ?
+	return (b->getNumberOfRows() != a->getNumberOfRows())
+		|| (b->getNumberOfColumns() != (a->getNumberOfColumns())) ?
 		false :
 		true;
 }
@@ -100,11 +100,11 @@ double** Matrix::transposeValues() {
 	return newValues;
 }
 
-Matrix* Matrix::subtract(Matrix a, Matrix b) {
+Matrix* Matrix::subtract(Matrix* a, Matrix* b) {
 	if (Matrix::sizecmp(a, b)) {
-		double** newValues = new double* [a.getNumberOfRows()];
-		uint rows = a.getNumberOfRows();
-		uint cols = a.getNumberOfColumns();
+		double** newValues = new double* [a->getNumberOfRows()];
+		uint rows = a->getNumberOfRows();
+		uint cols = a->getNumberOfColumns();
 
 		for (int row = 0; row < rows; row++)
 		{
@@ -113,7 +113,7 @@ Matrix* Matrix::subtract(Matrix a, Matrix b) {
 
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
-				newValues[row][col] = a.getValue(row, col) - b.getValue(row, col);
+				newValues[row][col] = a->getValue(row, col) - b->getValue(row, col);
 			}
 		}
 		return new Matrix(newValues, rows, cols);
@@ -122,16 +122,16 @@ Matrix* Matrix::subtract(Matrix a, Matrix b) {
 	return nullptr;
 }
 
-Matrix* Matrix::multiply(Matrix a, Matrix b)
+Matrix* Matrix::multiply(Matrix* a, Matrix* b)
 {
-	if (a.getNumberOfColumns() != b.getNumberOfRows())
+	if (a->getNumberOfColumns() != b->getNumberOfRows())
 	{
 		return nullptr;
 	}
 
-	double** newValues = new double*[a.getNumberOfRows()];
-	uint rows = a.getNumberOfRows();
-	uint cols = b.getNumberOfColumns();
+	double** newValues = new double*[a->getNumberOfRows()];
+	uint rows = a->getNumberOfRows();
+	uint cols = b->getNumberOfColumns();
 
 	for (int row = 0; row < rows; row++)
 	{
@@ -142,9 +142,9 @@ Matrix* Matrix::multiply(Matrix a, Matrix b)
 	{
 		for (int col = 0; col < cols; col++)
 		{
-			for (int innerCol = 0; innerCol < a.getNumberOfColumns(); innerCol++)
+			for (int innerCol = 0; innerCol < a->getNumberOfColumns(); innerCol++)
 			{
-				newValues[row][col] += a.getValue(row, innerCol) * a.getValue(innerCol, col);
+				newValues[row][col] += a->getValue(row, innerCol) * a->getValue(innerCol, col);
 			}
 		}
 	}

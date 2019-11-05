@@ -30,9 +30,9 @@ public:
 	double** transposeValues();
 	Matrix* multiply(double number);
 
-	static bool sizecmp(Matrix a, Matrix b);
-	static Matrix* subtract(Matrix a, Matrix b);
-	static Matrix* multiply(Matrix a, Matrix b);
+	static bool sizecmp(Matrix* a, Matrix* b);
+	static Matrix* subtract(Matrix* a, Matrix* b);
+	static Matrix* multiply(Matrix* a, Matrix* b);
 
 	~Matrix();
 };

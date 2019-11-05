@@ -10,6 +10,8 @@
 class NeuralNetwork
 {
 private:
+	//800, 600, 400 for testing changes of adaptive step
+
 	int N;
 
 	double e;
@@ -26,9 +28,32 @@ private:
 	void restore();
 	int compress();
 public:
-	NeuralNetwork(Image* image, double e);
+	static const int ADAPTIVE_STEP_INITIAL_VALUE = 1000;
 
+	NeuralNetwork(Image* image, double e);
+	
 	void run();
+	
+	static double calculateAdaptiveStep(
+		Matrix const* base, 
+		Matrix const* transposed
+	);
+	
+	static double calculateError(Matrix* deltaX, int length);
+	
+	static Matrix* prepareWeights(
+		double learningStep_T, 
+		Matrix* Y_T, 
+		Matrix* deltaX
+	);
+	
+	static Matrix* prepareWeights(
+		double learningStep, 
+		Matrix* X_T, 
+		Matrix* deltaX, 
+		Matrix* W_T
+	);
+
 };
 
 #endif // NEURAL_NETWORK_H

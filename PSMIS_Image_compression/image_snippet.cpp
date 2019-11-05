@@ -30,6 +30,11 @@ uint ImageSnippet::getStartY() const
 	return startY;
 }
 
+Matrix* ImageSnippet::getX0() const
+{
+	return x0;
+}
+
 int ImageSnippet::restoreColor(double color) {
 	double newColor = 255 * (color + 1) / 2;
 	newColor = newColor < 0 ? 0 : (newColor > 255 ? 255 : newColor);
