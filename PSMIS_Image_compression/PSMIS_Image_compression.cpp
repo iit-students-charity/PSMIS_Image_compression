@@ -44,6 +44,8 @@ int main()
 	Image* image = new Image(p, n, m, imagePath);
 	NeuralNetwork* nn = new NeuralNetwork(image, e);
 	
+
+	nn->run();
 }
 
 const char* getImagePath(uint choise)

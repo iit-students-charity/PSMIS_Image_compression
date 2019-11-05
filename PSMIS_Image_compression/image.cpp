@@ -27,6 +27,59 @@ Image::Image(uint p, uint n, uint m, const char* path) : Image(p, n, m)
 	tempHeight = image->height() / n;
 }
 
+uint Image::getN() const
+{
+	return n;
+}
+
+uint Image::getM() const
+{
+	return m;
+}
+
+uint Image::getP() const
+{
+	return p;
+}
+
+uint Image::getTempWidth() const
+{
+	return tempWidth;
+}
+
+uint Image::getTempHeight() const
+{
+	return tempHeight;
+}
+
+ImageSnippet* Image::getSnippets() const
+{
+	ImageSnippet* copy = snippets;
+	return copy;
+}
+
+uint Image::getSnippetsNumber() const
+{
+	return tempHeight * tempWidth;
+}
+
+uint Image::getWidth() const
+{
+	return image->width();
+}
+
+uint Image::getHeight() const
+{
+	return image->height();
+}
+
+void Image::setColor(uint x, uint y, int* color)
+{
+	(*image)(x, y, 0) = color[0];
+	(*image)(x, y, 1) = color[1];
+	(*image)(x, y, 2) = color[2];
+}
+
 void Image::load(const char* path)
 {
 	image->load(path);

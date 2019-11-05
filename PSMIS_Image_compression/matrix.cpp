@@ -9,11 +9,7 @@
 Matrix::Matrix(uint numberOfRows, uint numberOfColumns)
 	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns) // not nedeed?
 {
-	values = new double*[numberOfRows];
-	for (int i = 0; i < numberOfRows; ++i)
-	{
-		values[i] = new double[numberOfColumns];
-	}
+	initRandom(numberOfRows, numberOfColumns);
 }
 
 Matrix::Matrix(double** values, uint numberOfRows, uint numberOfColumns)
