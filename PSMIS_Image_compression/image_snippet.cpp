@@ -64,7 +64,7 @@ void ImageSnippet::createX0()
 		valuesVector[0][pixelIndex] = pixels.at(pixelIndex);
 	}
 
-	delete x0;
+	if (x0 != nullptr) delete x0;
 	x0 = new Matrix(valuesVector, numberOfRows, numberOfColumns);
 }
 

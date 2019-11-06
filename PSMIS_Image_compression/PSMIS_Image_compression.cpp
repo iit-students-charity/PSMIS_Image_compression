@@ -11,22 +11,25 @@ int main()
 	uint choise;
 	do
 	{
-		std::cout << "Choose an image: \n1. Girl\n2. Flower\n3. Fight";
+		std::cout << "Choose an image: \n1. Redhead\n2. Flower\n3. Fight\n";
 		std::cin >> choise;
 
 		switch (choise)
 		{
 		case 1:
 		{
-			imagePath = "\\src\\girl.png";
+			imagePath = "C:\\Users\\User\\source\\repos\\PSMIS_Image_compression\\PSMIS_Image_compression\\src\\redhead.png";
+			break;
 		}
 		case 2:
 		{
-			imagePath = "\\src\\flower.png";
+			imagePath = "C:\\Users\\User\\source\\repos\\PSMIS_Image_compression\\PSMIS_Image_compression\\src\\flower.png";
+			break;
 		}
 		case 3:
 		{
-			imagePath = "\\src\\fight.png";
+			imagePath = "C:\\Users\\User\\source\\repos\\PSMIS_Image_compression\\PSMIS_Image_compression\\src\\fight.png";
+			break;
 		}
 		}
 
@@ -37,19 +40,21 @@ int main()
 		}
 	} while (choise == 0);
 
-	uint p = 0;
 	uint n = 0;
 	uint m = 0;
+	system("cls");
 	std::cout << "Enter n (snippet height), m (snippet width) parameters: ";
 	std::cin >> n >> m;
 
+	uint p = n / 2 + 1;
 	while (p > n / 2)
 	{
+		system("cls");
 		std::cout << "Enter p (<= " << n / 2 << ") parameter: ";
 		std::cin >> p;
 	}
 
-	double e = 0;
+	double e = 0.1 * p + 1;
 	while (e > 0.1 * p)
 	{
 		std::cout << "Enter e (<= " << 0.1 * p << ") parameter: ";

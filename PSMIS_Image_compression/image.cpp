@@ -1,3 +1,4 @@
+#define cimg_use_png
 #include <CImg.h>
 
 #include "Image.h"

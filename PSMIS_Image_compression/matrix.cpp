@@ -9,7 +9,14 @@
 Matrix::Matrix(uint numberOfRows, uint numberOfColumns)
 	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns) // not nedeed?
 {
-	initRandom(numberOfRows, numberOfColumns);
+	if (numberOfRows == 0 || numberOfColumns == 0)
+	{
+		values = nullptr;
+	}
+	else
+	{
+		initRandom(numberOfRows, numberOfColumns);
+	}
 }
 
 Matrix::Matrix(double** values, uint numberOfRows, uint numberOfColumns)
@@ -173,10 +180,14 @@ Matrix* Matrix::multiply(double number)
 
 Matrix::~Matrix()
 {
+	if (values == nullptr)
+	{
+		return;
+	}
+
 	for (uint rowNumber = 0; rowNumber < numberOfRows; rowNumber++)
 	{
 		delete[] values[rowNumber];
 	}
 	delete[] values;
-	delete values;
 }
