@@ -71,7 +71,7 @@ bool Matrix::sizecmp(Matrix* a, Matrix* b)
 
 double** Matrix::initRandom(uint numberOfRows, uint numberOfColumns)
 {
-	double** values = new double*[numberOfRows];
+	this->values = new double*[numberOfRows];
 
 	srand(time(0));
 	int multiplier = 1000000;
@@ -156,7 +156,7 @@ Matrix* Matrix::multiply(Matrix* a, Matrix* b)
 		}
 	}
 
-	return new Matrix(newValues);
+	return new Matrix(newValues, a->getNumberOfRows(), a->getNumberOfColumns());
 }
 
 Matrix* Matrix::multiply(double number)

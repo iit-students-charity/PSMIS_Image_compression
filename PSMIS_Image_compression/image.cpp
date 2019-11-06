@@ -99,6 +99,8 @@ void Image::initSnippets()
 
 	for (int w = 0; w < tempWidth; w++)
 	{
+		y = 0;
+
 		for (int h = 0; h < tempHeight; h++)
 		{
 			ImageSnippet snippet(x, y, n, m);

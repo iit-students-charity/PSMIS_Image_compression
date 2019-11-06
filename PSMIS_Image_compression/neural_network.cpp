@@ -6,6 +6,7 @@
 
 NeuralNetwork::NeuralNetwork(Image* image, double e)
 {
+	N = image->getN() * image->getM() * 3;
 	this->inputImage = image;
 	this->e = e;
 }

@@ -13,7 +13,7 @@ private:
 
 	const uint numberOfRows;
 	const uint numberOfColumns;
-	static double** initRandom(uint numberOfRows = 0U, uint numberOfColumns = 0U);
+	double** initRandom(uint numberOfRows = 0U, uint numberOfColumns = 0U);
 public:
 	Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U);
 	Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U);
