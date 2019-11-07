@@ -46,11 +46,11 @@ int main()
 	std::cout << "Enter n (snippet height), m (snippet width) parameters: ";
 	std::cin >> n >> m;
 
-	uint p = n / 2 + 1;
-	while (p > n / 2)
+	uint p = n * 2 + 1;
+	while (p > n * 2)
 	{
 		system("cls");
-		std::cout << "Enter p (<= " << n / 2 << ") parameter: ";
+		std::cout << "Enter p (hidden layer neurons number, <= " << n * 2 << ") parameter: ";
 		std::cin >> p;
 	}
 

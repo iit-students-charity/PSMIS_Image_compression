@@ -7,7 +7,7 @@
 ImageSnippet::ImageSnippet(uint startX, uint startY, uint width, uint height)
 	: width(width), height(height), startX(startX), startY(startY)
 {
-	x0 = new Matrix(height, width);
+	x0 = nullptr;
 }
 
 uint ImageSnippet::getWidth() const
@@ -56,7 +56,7 @@ void ImageSnippet::addPixel(double red, double green, double blue)
 void ImageSnippet::createX0()
 {
 	uint numberOfRows = 1;
-	uint numberOfColumns = pixels.size();
+ 	uint numberOfColumns = pixels.size();
 
 	double** valuesVector = new double*[numberOfRows];
 	valuesVector[0] = new double[numberOfColumns];
@@ -70,8 +70,5 @@ void ImageSnippet::createX0()
 
 ImageSnippet::~ImageSnippet()
 {
-	/*delete [] pixels;
-	delete pixels;*/
-
 	delete x0;
 }

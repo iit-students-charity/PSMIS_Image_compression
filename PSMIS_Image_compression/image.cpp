@@ -7,9 +7,9 @@
 
 Image::Image(uint p, uint n, uint m)
 {
-	this->p = p;
-	this->n = n;
-	this->m = m;
+	this->hiddenNeuronsNumber = p;
+	this->snippetWidth = n;
+	this->snippetHeight = m;
 
 	image = new cimg_library::CImg<uchar>();
 	path = nullptr;
@@ -23,24 +23,25 @@ Image::Image(uint p, uint n, uint m, const char* path) : Image(p, n, m)
 {
 	this->path = (char*)path;
 	load(path);
-
 	tempWidth = image->width() / m;
 	tempHeight = image->height() / n;
+	
+	initSnippets();
 }
 
 uint Image::getN() const
 {
-	return n;
+	return snippetWidth;
 }
 
 uint Image::getM() const
 {
-	return m;
+	return snippetHeight;
 }
 
 uint Image::getP() const
 {
-	return p;
+	return hiddenNeuronsNumber;
 }
 
 uint Image::getTempWidth() const
@@ -53,10 +54,9 @@ uint Image::getTempHeight() const
 	return tempHeight;
 }
 
-ImageSnippet* Image::getSnippets() const
+vector<ImageSnippet*>* Image::getSnippets() const
 {
-	ImageSnippet* copy = snippets;
-	return copy;
+	return snippets;
 }
 
 uint Image::getSnippetsNumber() const
@@ -88,12 +88,12 @@ void Image::load(const char* path)
 
 void Image::save()
 {
-	image->save(path, ++compressionIterationNumber, 1);
+	image->save(path, 1, 1);
 }
 
 void Image::initSnippets()
 {
-	snippets = new ImageSnippet[tempWidth * tempHeight];
+	snippets = new vector<ImageSnippet*>();
 	int x = 0;
 	int y = 0;
 
@@ -103,17 +103,17 @@ void Image::initSnippets()
 
 		for (int h = 0; h < tempHeight; h++)
 		{
-			ImageSnippet snippet(x, y, n, m);
+			ImageSnippet* snippet = new ImageSnippet(x, y, snippetWidth, snippetHeight);
 
-			for (int widthIndex = 0; widthIndex < m; widthIndex++)
+			for (int widthIndex = 0; widthIndex < snippetHeight; widthIndex++)
 			{
-				for (int heightIndex = 0; heightIndex < n; heightIndex++)
+				for (int heightIndex = 0; heightIndex < snippetWidth; heightIndex++)
 				{
 					if (widthIndex < image->width() && heightIndex < image->height())
 					{
 						int currX = widthIndex + x;
 						int currY = heightIndex + y;
-						snippet.addPixel(
+						snippet->addPixel(
 							(*image)(currX, currY, 0, 0),
 							(*image)(currX, currY, 0, 1),
 							(*image)(currX, currY, 0, 2)
@@ -121,16 +121,16 @@ void Image::initSnippets()
 					}
 					else
 					{
-						snippet.addPixel(-1., -1., -1.);
+						snippet->addPixel(-1., -1., -1.);
 					}
 				}
 			}
-			y += n;
+			y += snippetWidth;
 
-			snippet.createX0();
-			snippets[w * 10 + h] = snippet;
+			snippet->createX0();
+			snippets->push_back(snippet);
 		}
-		x += m;
+		x += snippetHeight;
 	}
 }
 

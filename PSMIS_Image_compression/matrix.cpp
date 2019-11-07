@@ -20,13 +20,8 @@ Matrix::Matrix(uint numberOfRows, uint numberOfColumns)
 }
 
 Matrix::Matrix(double** values, uint numberOfRows, uint numberOfColumns)
-	: Matrix(numberOfRows, numberOfColumns)
+	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns)
 {
-	/*for (int r = 0; r < row; r++) {
-		if (matrix[r].length != column) {
-			throw new IllegalArgumentException("Different rows' length.");
-		}
-	}*/
 	this->values = values;
 }
 
@@ -69,12 +64,12 @@ bool Matrix::sizecmp(Matrix* a, Matrix* b)
 }
 
 
-double** Matrix::initRandom(uint numberOfRows, uint numberOfColumns)
+void Matrix::initRandom(uint numberOfRows, uint numberOfColumns)
 {
 	this->values = new double*[numberOfRows];
 
 	srand(time(0));
-	int multiplier = 1000000;
+	int multiplier = 1000.;
 
 	for (int row = 0; row < numberOfRows; row++)
 	{
@@ -82,11 +77,10 @@ double** Matrix::initRandom(uint numberOfRows, uint numberOfColumns)
 
 		for (int col = 0; col < numberOfColumns; col++)
 		{
-			values[row][col] = (-multiplier + rand() % multiplier) / multiplier;
+			int rand_ = rand() % multiplier;
+			values[row][col] = (double)(-multiplier + rand_) / multiplier;
 		}
 	}
-
-	return values;
 }
 
 double** Matrix::transposeValues() {
@@ -151,12 +145,12 @@ Matrix* Matrix::multiply(Matrix* a, Matrix* b)
 		{
 			for (int innerCol = 0; innerCol < a->getNumberOfColumns(); innerCol++)
 			{
-				newValues[row][col] += a->getValue(row, innerCol) * a->getValue(innerCol, col);
+				newValues[row][col] += a->getValue(row, innerCol) * b->getValue(innerCol, col);
 			}
 		}
 	}
 
-	return new Matrix(newValues, a->getNumberOfRows(), a->getNumberOfColumns());
+	return new Matrix(newValues, rows, cols);
 }
 
 Matrix* Matrix::multiply(double number)
@@ -175,7 +169,7 @@ Matrix* Matrix::multiply(double number)
 		}
 	}
 
-	return new Matrix(newValues);
+	return new Matrix(newValues, numberOfRows, numberOfColumns);
 }
 
 Matrix::~Matrix()

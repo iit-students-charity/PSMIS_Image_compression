@@ -12,28 +12,30 @@
 class Image
 {
 private:
-	uint p;
-	uint n;
-	uint m;
+	uint hiddenNeuronsNumber;
+	uint snippetWidth;
+	uint snippetHeight;
 
 	uint tempHeight;
 	uint tempWidth;
 
 	cimg_library::CImg<uchar>* image;
-	ImageSnippet* snippets;
+	vector<ImageSnippet*>* snippets;
 
 	char* path;
 	uint compressionIterationNumber = 0;
+
+	void initSnippets();
 public:
-	Image(uint p, uint n, uint m);
-	Image(uint p, uint n, uint m, const char* path);
+	Image(uint hiddenNeuronsNumber, uint snippetWidth, uint snippetHeight);
+	Image(uint hiddenNeuronsNumber, uint snippetWidth, uint snippetHeight, const char* path);
 
 	uint getN() const;
 	uint getM() const;
 	uint getP() const;
 	uint getTempWidth() const;
 	uint getTempHeight() const;
-	ImageSnippet* getSnippets() const;
+	vector<ImageSnippet*>* getSnippets() const;
 	
 	uint getSnippetsNumber() const;
 	uint getWidth() const;
@@ -42,8 +44,6 @@ public:
 
 	void load(const char* path);
 	void save();
-
-	void initSnippets();
 
 	~Image();
 };

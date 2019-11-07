@@ -19,7 +19,6 @@ private:
 	uint startX;
 	uint startY;
 
-	//double* pixels;
 	vector<double> pixels;
 	Matrix* x0;
 public:

@@ -7,8 +7,9 @@
 NeuralNetwork::NeuralNetwork(Image* image, double e)
 {
 	N = image->getN() * image->getM() * 3;
-	this->inputImage = image;
 	this->e = e;
+
+	this->inputImage = image;
 }
 
 void NeuralNetwork::run()
@@ -16,7 +17,6 @@ void NeuralNetwork::run()
 	uint L = inputImage->getTempHeight() * inputImage->getTempWidth();
 	double Z = (N * L) / (double)((N + L) * inputImage->getP() + 2);
 
-	inputImage->initSnippets();
 	int I = compress();
 	restore(); 
 
@@ -29,7 +29,7 @@ double NeuralNetwork::calculateAdaptiveStep(Matrix const* base, Matrix const* tr
 	for (int i = 0; i < base->getNumberOfColumns(); i++) { // !!!! [0].length
 		step += base->getValue(0, i) * transposed->getValue(i, 0);
 	}
-	return 1 / (step);
+	return 1 / step;
 }
 
 Matrix* NeuralNetwork::prepareWeights(double learningStep, Matrix* X_T, Matrix* deltaX, Matrix* W_T)
@@ -62,8 +62,8 @@ int NeuralNetwork::compress()
 	W = new Matrix(N, inputImage->getP());
 	W_ = new Matrix(
 		W->transposeValues(),
-		W->getNumberOfRows(), 
-		W->getNumberOfColumns()
+		W->getNumberOfColumns(),
+		W->getNumberOfRows()
 	);
 
 	Matrix* deltaX;
@@ -73,29 +73,55 @@ int NeuralNetwork::compress()
 
 	while (E > e) {
 		E = 0;
-		ImageSnippet* snippets = inputImage->getSnippets();
+		vector<ImageSnippet*>* snippets = inputImage->getSnippets();
 		for (int snIndex = 0; snIndex < inputImage->getSnippetsNumber(); snIndex++) {
-			X = snippets[snIndex].getX0();
+			X = snippets->at(snIndex)->getX0();
 			Y = Matrix::multiply(X, W);
 			X_ = Matrix::multiply(Y, W_);
 			deltaX = Matrix::subtract(X_, X);
-			adaptiveStep = calculateAdaptiveStep(X, new Matrix(X->transposeValues()));
-			adaptiveStep_T = calculateAdaptiveStep(Y, new Matrix(Y->transposeValues()));
+			adaptiveStep = calculateAdaptiveStep(
+				X, 
+				new Matrix(
+					X->transposeValues(), 
+					X->getNumberOfColumns(), 
+					X->getNumberOfRows()
+				)
+			);
+			adaptiveStep_T = calculateAdaptiveStep(
+				Y, 
+				new Matrix(
+					Y->transposeValues(), 
+					Y->getNumberOfColumns(), 
+					Y->getNumberOfRows()
+				)
+			);
 
 			W = Matrix::subtract(
 				W, 
 				prepareWeights(
 					adaptiveStep, 
-					new Matrix(X->transposeValues()), 
+					new Matrix(
+						X->transposeValues(),
+						X->getNumberOfColumns(),
+						X->getNumberOfRows()
+					),
 					deltaX,
-					new Matrix(W_->transposeValues())
+					new Matrix(
+						W_->transposeValues(),
+						W_->getNumberOfColumns(),
+						W_->getNumberOfRows()
+					)
 				)
 			);
 			W_ = Matrix::subtract(
 				W_, 
 				prepareWeights(
 					adaptiveStep_T, 
-					new Matrix(Y->transposeValues()), 
+					new Matrix(
+						Y->transposeValues(),
+						Y->getNumberOfColumns(),
+						Y->getNumberOfRows()
+					),
 					deltaX
 				)
 			);
@@ -112,27 +138,27 @@ int NeuralNetwork::compress()
 
 void NeuralNetwork::restore()
 {
-	ImageSnippet* snippets = inputImage->getSnippets();
+	vector<ImageSnippet*>* snippets = inputImage->getSnippets();
 	uint snippetWidth = inputImage->getM();
 	uint snippetHeight = inputImage->getN();
 
 	for (int snIndex = 0; snIndex < inputImage->getSnippetsNumber(); snIndex++)
 	{
-		X = snippets[snIndex].getX0();
+		X = snippets->at(snIndex)->getX0();
 		Y = Matrix::multiply(X, W);
 		X_ = Matrix::multiply(Y, W_);
 
-		uint x = snippets[snIndex].getStartX();
-		uint y = snippets[snIndex].getStartY();
+		uint x = snippets->at(snIndex)->getStartX();
+		uint y = snippets->at(snIndex)->getStartY();
 		uint pixelPosition = 0;
 
 		for (int w = 0; w < snippetWidth; w++)
 		{
 			for (int h = 0; h < snippetHeight; h++)
 			{
-				int red = snippets[snIndex].restoreColor(X_->getValue(0, pixelPosition++));
-				int green = snippets[snIndex].restoreColor(X_->getValue(0, pixelPosition++));
-				int blue = snippets[snIndex].restoreColor(X_->getValue(0, pixelPosition++));
+				int red = snippets->at(snIndex)->restoreColor(X_->getValue(0, pixelPosition++));
+				int green = snippets->at(snIndex)->restoreColor(X_->getValue(0, pixelPosition++));
+				int blue = snippets->at(snIndex)->restoreColor(X_->getValue(0, pixelPosition++));
 
 				int* color = new int[3]{ red, green, blue };
 				if (x + w < inputImage->getWidth())
