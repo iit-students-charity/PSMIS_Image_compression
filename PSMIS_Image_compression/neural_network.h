@@ -36,13 +36,13 @@ public:
 	
 	static double calculateError(Matrix const* deltaX);
 	
-	static Matrix* prepareWeights(
+	static Matrix* calculateWeightsDifferenceMember(
 		double learningStep_T, 
 		Matrix* Y_T, 
 		Matrix* deltaX
 	);
 	
-	static Matrix* prepareWeights(
+	static Matrix* calculateWeightsDifferenceMember(
 		double learningStep, 
 		Matrix* X_T, 
 		Matrix* deltaX, 

@@ -19,9 +19,10 @@ void NeuralNetwork::run()
 	double Z = (N * L) / (double)((N + L) * hiddenNeuronsNumber + 2);
 
 	int I = compress();
-	restore(); 
+	restore();
 
-	std::cout << "L: " << L << ". Z: " << Z << ". I: " << I << ". Adaptive step: " << learningRate;
+	std::cout << "snippets count (L): " << L << ", compression coefficient (Z): " << Z 
+		<< ", number of iterations (I): " << I << ", learning rate (alpha): " << learningRate;
 }
 
 double NeuralNetwork::calculateAdaptiveLearningRate(Matrix const* base)
@@ -34,7 +35,7 @@ double NeuralNetwork::calculateAdaptiveLearningRate(Matrix const* base)
 	return 1. / sum;
 }
 
-Matrix* NeuralNetwork::prepareWeights(
+Matrix* NeuralNetwork::calculateWeightsDifferenceMember(
 	double learningRate, Matrix* transposedX, 
 	Matrix* deltaX, Matrix* transposedW_
 )
@@ -49,7 +50,7 @@ Matrix* NeuralNetwork::prepareWeights(
 	return result;
 }
 
-Matrix* NeuralNetwork::prepareWeights(double learningRate_, Matrix* transposedY, Matrix* deltaX)
+Matrix* NeuralNetwork::calculateWeightsDifferenceMember(double learningRate_, Matrix* transposedY, Matrix* deltaX)
 {
 	Matrix* firstMultiply = transposedY->multiply(learningRate_);
 	return Matrix::multiply(firstMultiply, deltaX);
@@ -108,7 +109,7 @@ int NeuralNetwork::compress()
 			learningRate = calculateAdaptiveLearningRate(X);
 			learningRate_ = calculateAdaptiveLearningRate(Y);
 
-			Matrix* preparedWeightsW = prepareWeights(
+			Matrix* preparedWeightsW = calculateWeightsDifferenceMember(
 				learningRate, transposedX, deltaX,
 				new Matrix(
 					W_->transposeValues(),
@@ -116,7 +117,7 @@ int NeuralNetwork::compress()
 					W_->getNumberOfRows()
 				)
 			);
-			Matrix* preparedWeightsW_ = prepareWeights(
+			Matrix* preparedWeightsW_ = calculateWeightsDifferenceMember(
 				learningRate_,
 				transposedY,
 				deltaX
@@ -138,7 +139,7 @@ int NeuralNetwork::compress()
 		}
 
 		iteration++;
-		cout << E << ' ';
+		cout << "iteration: " << iteration << ", error: " << E << '\n';
 	}
 
 	return iteration;
@@ -177,7 +178,7 @@ void NeuralNetwork::restore()
 					}
 				}
 				
-				delete color;
+				delete[] color;
 			}
 		}
 

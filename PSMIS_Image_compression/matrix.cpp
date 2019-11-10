@@ -7,7 +7,7 @@
 
 
 Matrix::Matrix(uint numberOfRows, uint numberOfColumns)
-	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns) // not nedeed?
+	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns)
 {
 	if (numberOfRows == 0 || numberOfColumns == 0)
 	{
