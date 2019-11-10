@@ -133,7 +133,7 @@ Matrix* Matrix::subtract(Matrix* a, Matrix* b)
 	return nullptr;
 }
 
-Matrix* Matrix::multiply(Matrix* a, Matrix* b)
+Matrix* Matrix::multiply(Matrix const* a, Matrix const* b)
 {
 	if (a->getNumberOfColumns() != b->getNumberOfRows())
 	{

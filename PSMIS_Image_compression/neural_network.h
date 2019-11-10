@@ -15,7 +15,7 @@ private:
 	int N;
 
 	double e;
-	double adaptiveStep;
+	double adaptiveLearningRate;
 
 	Matrix* X;
 	Matrix* X_;
@@ -28,18 +28,13 @@ private:
 	void restore();
 	int compress();
 public:
-	static const int ADAPTIVE_STEP_INITIAL_VALUE = 0.01;
-
 	NeuralNetwork(Image* image, double e, uint hiddenNeuronsNumber);
 	
 	void run();
 	
-	static double calculateAdaptiveStep(
-		Matrix const* base, 
-		Matrix const* transposed
-	);
+	static double calculateAdaptiveLearningRate(Matrix const* base);
 	
-	static double calculateError(Matrix* deltaX, int length);
+	static double calculateError(Matrix const* deltaX);
 	
 	static Matrix* prepareWeights(
 		double learningStep_T, 

@@ -36,7 +36,7 @@ public:
 
 	static bool sizecmp(Matrix* a, Matrix* b);
 	static Matrix* subtract(Matrix* a, Matrix* b);
-	static Matrix* multiply(Matrix* a, Matrix* b);
+	static Matrix* multiply(Matrix const* a, Matrix const* b);
 
 	~Matrix();
 };

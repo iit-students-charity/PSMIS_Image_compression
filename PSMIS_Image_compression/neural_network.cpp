@@ -21,36 +21,45 @@ void NeuralNetwork::run()
 	int I = compress();
 	restore(); 
 
-	std::cout << "L: " << L << ". Z: " << Z << ". I: " << I << ". Adaptive step: " << adaptiveStep;
+	std::cout << "L: " << L << ". Z: " << Z << ". I: " << I << ". Adaptive step: " << adaptiveLearningRate;
 }
 
-double NeuralNetwork::calculateAdaptiveStep(Matrix const* base, Matrix const* transposed)
+double NeuralNetwork::calculateAdaptiveLearningRate(Matrix const* base)
 {
-	double step = (double)NeuralNetwork::ADAPTIVE_STEP_INITIAL_VALUE;
-	for (int i = 0; i < base->getNumberOfColumns(); i++) { // !!!! [0].length
-		step += base->getValue(0, i) * transposed->getValue(i, 0);
+	double sum = 0;
+	for (int i = 0; i < base->getNumberOfColumns(); i++)
+	{
+		sum += base->getValue(0, i) * base->getValue(0, i);
 	}
-	return 1 / step;
+	return 1. / sum;
 }
 
-Matrix* NeuralNetwork::prepareWeights(double learningStep, Matrix* X_T, Matrix* deltaX, Matrix* W_T)
+Matrix* NeuralNetwork::prepareWeights(
+	double learningRate, Matrix* transposedX, 
+	Matrix* deltaX, Matrix* transposedW_
+)
 {
-	Matrix* firstMultiply = X_T->multiply(learningStep);
+	Matrix* firstMultiply = transposedX->multiply(learningRate);
 	Matrix* secondMultiply = Matrix::multiply(firstMultiply, deltaX);
-	return Matrix::multiply(secondMultiply, W_T);
+	Matrix* result = Matrix::multiply(secondMultiply, transposedW_);
+
+	delete firstMultiply;
+	delete secondMultiply;
+
+	return result;
 }
 
-Matrix* NeuralNetwork::prepareWeights(double learningStep_T, Matrix* Y_T, Matrix* deltaX)
+Matrix* NeuralNetwork::prepareWeights(double learningRate_, Matrix* transposedY, Matrix* deltaX)
 {
-	Matrix* firstMultiply = Y_T->multiply(learningStep_T);
+	Matrix* firstMultiply = transposedY->multiply(learningRate_);
 	return Matrix::multiply(firstMultiply, deltaX);
 }
 
-double NeuralNetwork::calculateError(Matrix* deltaX, int length)
+double NeuralNetwork::calculateError(Matrix const* deltaX)
 {
 	double e = 0.;
 
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < deltaX->getNumberOfColumns(); i++)
 	{
 		e += deltaX->getValue(0, i) * deltaX->getValue(0, i);
 	}
@@ -68,69 +77,67 @@ int NeuralNetwork::compress()
 	);
 
 	Matrix* deltaX;
-	double adaptiveStep_T;
+
+	double adaptiveLearningRate_;
 	uint iteration = 0;
 	double E = std::numeric_limits<double>::max();
 
-	while (E > e) {
+	vector<ImageSnippet*>* snippets = inputImage->getSnippets();
+
+	while (E > e)
+	{
 		E = 0;
-		vector<ImageSnippet*>* snippets = inputImage->getSnippets();
-		for (int snIndex = 0; snIndex < inputImage->getSnippetsNumber(); snIndex++) {
+		for (int snIndex = 0; snIndex < inputImage->getSnippetsNumber(); snIndex++)
+		{
 			X = snippets->at(snIndex)->getX0();
 			Y = Matrix::multiply(X, W);
 			X_ = Matrix::multiply(Y, W_);
 			deltaX = Matrix::subtract(X_, X);
-			adaptiveStep = calculateAdaptiveStep(
-				X, 
-				new Matrix(
-					X->transposeValues(), 
-					X->getNumberOfColumns(), 
-					X->getNumberOfRows()
-				)
+
+			Matrix* transposedX = new Matrix(
+				X->transposeValues(),
+				X->getNumberOfColumns(),
+				X->getNumberOfRows()
 			);
-			adaptiveStep_T = calculateAdaptiveStep(
-				Y, 
-				new Matrix(
-					Y->transposeValues(), 
-					Y->getNumberOfColumns(), 
-					Y->getNumberOfRows()
-				)
+			Matrix* transposedY = new Matrix(
+				Y->transposeValues(),
+				Y->getNumberOfColumns(),
+				Y->getNumberOfRows()
 			);
 
-			W = Matrix::subtract(
-				W, 
-				prepareWeights(
-					adaptiveStep, 
-					new Matrix(
-						X->transposeValues(),
-						X->getNumberOfColumns(),
-						X->getNumberOfRows()
-					),
-					deltaX,
-					new Matrix(
-						W_->transposeValues(),
-						W_->getNumberOfColumns(),
-						W_->getNumberOfRows()
-					)
+			adaptiveLearningRate = calculateAdaptiveLearningRate(X);
+			adaptiveLearningRate_ = calculateAdaptiveLearningRate(Y);
+
+			Matrix* preparedWeightsW = prepareWeights(
+				adaptiveLearningRate, transposedX, deltaX,
+				new Matrix(
+					W_->transposeValues(),
+					W_->getNumberOfColumns(),
+					W_->getNumberOfRows()
 				)
 			);
-			W_ = Matrix::subtract(
-				W_, 
-				prepareWeights(
-					adaptiveStep_T, 
-					new Matrix(
-						Y->transposeValues(),
-						Y->getNumberOfColumns(),
-						Y->getNumberOfRows()
-					),
-					deltaX
-				)
+			Matrix* preparedWeightsW_ = prepareWeights(
+				adaptiveLearningRate_,
+				transposedY,
+				deltaX
 			);
-			E += calculateError(deltaX, X->getNumberOfColumns()); // !!!!!
+
+			W = Matrix::subtract(W, preparedWeightsW);
+			W_ = Matrix::subtract(W_, preparedWeightsW_);
+			E += calculateError(deltaX);
+
+			delete transposedX;
+			delete transposedY;
+
+			delete preparedWeightsW;
+			delete preparedWeightsW_;
+
+			delete Y;
+			delete X_;
+			delete deltaX;
 		}
 
 		iteration++;
-
 		cout << E << ' ';
 	}
 
@@ -169,8 +176,13 @@ void NeuralNetwork::restore()
 						inputImage->setColor(x + w, y + h, color);
 					}
 				}
+				
+				delete color;
 			}
 		}
+
+		delete Y;
+		delete X_;
 	}
 
 	inputImage->save();
