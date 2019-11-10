@@ -58,10 +58,12 @@ void ImageSnippet::createX0()
 	uint numberOfRows = 1;
  	uint numberOfColumns = pixels.size();
 
-	double** valuesVector = new double*[numberOfRows];
-	valuesVector[0] = new double[numberOfColumns];
+	vector<vector<double>>* valuesVector = new vector<vector<double>>();
+	valuesVector->resize(numberOfRows);
+
+	valuesVector->at(0).resize(numberOfColumns);
 	for (int pixelIndex = 0; pixelIndex < numberOfColumns; pixelIndex++) {
-		valuesVector[0][pixelIndex] = pixels.at(pixelIndex);
+		valuesVector->at(0).at(pixelIndex) = pixels.at(pixelIndex);
 	}
 
 	if (x0 != nullptr) delete x0;

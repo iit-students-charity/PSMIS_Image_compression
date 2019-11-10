@@ -19,7 +19,7 @@ Matrix::Matrix(uint numberOfRows, uint numberOfColumns)
 	}
 }
 
-Matrix::Matrix(double** values, uint numberOfRows, uint numberOfColumns)
+Matrix::Matrix(vector<vector<double>>* values, uint numberOfRows, uint numberOfColumns)
 	: numberOfRows(numberOfRows), numberOfColumns(numberOfColumns)
 {
 	this->values = values;
@@ -37,20 +37,20 @@ uint Matrix::getNumberOfColumns() const
 
 double Matrix::getValue(uint rowNumber, uint columnNumber) const
 {
-	return values[rowNumber][columnNumber];
+	return values->at(rowNumber).at(columnNumber);
 }
 
 void Matrix::setValue(uint rowNumber, uint columnNumber, double value)
 {
-	values[rowNumber][columnNumber] = value;
+	values->at(rowNumber).at(columnNumber) = value;
 }
 
-const double* Matrix::getRowVector(uint numberOfRow) const
+const vector<double>* Matrix::getRowVector(uint numberOfRow) const
 {
-	return values[numberOfRow];
+	return &values->at(numberOfRow);
 }
 
-const double* Matrix::getColumnVector(uint numberOfColumn) const
+const vector<double>* Matrix::getColumnVector(uint numberOfColumn) const
 {
 	return nullptr;
 }
@@ -66,57 +66,67 @@ bool Matrix::sizecmp(Matrix* a, Matrix* b)
 
 void Matrix::initRandom(uint numberOfRows, uint numberOfColumns)
 {
-	this->values = new double*[numberOfRows];
+	this->values = new vector<vector<double>>();
+	this->values->resize(numberOfRows);
 
 	srand(time(0));
-	int multiplier = 1000.;
+	int multiplier = 100.;
 
 	for (int row = 0; row < numberOfRows; row++)
 	{
-		values[row] = new double[numberOfColumns];
+		values->at(row).resize(numberOfColumns);
 
 		for (int col = 0; col < numberOfColumns; col++)
 		{
-			int rand_ = rand() % multiplier;
-			values[row][col] = (double)(-multiplier + rand_) / multiplier;
+			int rand_ = rand() % ((int)multiplier * 2 + 1);
+			values->at(row).at(col) = (double)(-multiplier + rand_) / multiplier;
 		}
 	}
 }
 
-double** Matrix::transposeValues() {
-	double** newValues = new double*[numberOfColumns];
+vector<vector<double>>* Matrix::transposeValues()
+{
+	vector<vector<double>>* newValues = new vector<vector<double>>();
+	newValues->resize(numberOfColumns);
 
 	for (int row = 0; row < numberOfColumns; row++)
 	{
-		newValues[row] = new double[numberOfRows];
+		newValues->at(row).resize(numberOfRows);
 	}
 	for (int row = 0; row < numberOfRows; row++)
 	{
 		for (int col = 0; col < numberOfColumns; col++)
 		{
-			newValues[col][row] = values[row][col];
+			newValues->at(col).at(row) = values->at(row).at(col);
 		}
 	}
 
 	return newValues;
 }
 
-Matrix* Matrix::subtract(Matrix* a, Matrix* b) {
-	if (Matrix::sizecmp(a, b)) {
-		double** newValues = new double* [a->getNumberOfRows()];
+Matrix* Matrix::subtract(Matrix* a, Matrix* b)
+{
+	if (Matrix::sizecmp(a, b))
+	{
+		vector<vector<double>>* newValues = new vector<vector<double>>();
+		newValues->resize(a->getNumberOfRows());
+
 		uint rows = a->getNumberOfRows();
 		uint cols = a->getNumberOfColumns();
 
 		for (int row = 0; row < rows; row++)
 		{
-			newValues[row] = new double[cols];
+			newValues->at(row).resize(cols);
 		}
 
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				newValues[row][col] = a->getValue(row, col) - b->getValue(row, col);
+		for (int row = 0; row < rows; row++)
+		{
+			for (int col = 0; col < cols; col++)
+			{
+				newValues->at(row).at(col) = a->getValue(row, col) - b->getValue(row, col);
 			}
 		}
+
 		return new Matrix(newValues, rows, cols);
 	}
 
@@ -130,13 +140,14 @@ Matrix* Matrix::multiply(Matrix* a, Matrix* b)
 		return nullptr;
 	}
 
-	double** newValues = new double*[a->getNumberOfRows()];
+	vector<vector<double>>* newValues = new vector<vector<double>>();
+	newValues->resize(a->getNumberOfRows());
 	uint rows = a->getNumberOfRows();
 	uint cols = b->getNumberOfColumns();
 
 	for (int row = 0; row < rows; row++)
 	{
-		newValues[row] = new double[cols];
+		newValues->at(row).resize(cols);
 	}
 
 	for (int row = 0; row < rows; row++)
@@ -145,7 +156,7 @@ Matrix* Matrix::multiply(Matrix* a, Matrix* b)
 		{
 			for (int innerCol = 0; innerCol < a->getNumberOfColumns(); innerCol++)
 			{
-				newValues[row][col] += a->getValue(row, innerCol) * b->getValue(innerCol, col);
+				newValues->at(row).at(col) += a->getValue(row, innerCol) * b->getValue(innerCol, col);
 			}
 		}
 	}
@@ -155,17 +166,18 @@ Matrix* Matrix::multiply(Matrix* a, Matrix* b)
 
 Matrix* Matrix::multiply(double number)
 {
-	double** newValues = new double*[numberOfRows];
+	vector<vector<double>>* newValues = new vector<vector<double>>();
+	newValues->resize(numberOfRows);
 	for (int row = 0; row < numberOfRows; row++)
 	{
-		newValues[row] = new double[numberOfColumns];
+		newValues->at(row).resize(numberOfColumns);
 	}
 
 	for (int row = 0; row < numberOfRows; row++)
 	{
 		for (int col = 0; col < numberOfColumns; col++)
 		{
-			newValues[row][col] = number * values[row][col];
+			newValues->at(row).at(col) = number * values->at(row).at(col);
 		}
 	}
 
@@ -179,9 +191,5 @@ Matrix::~Matrix()
 		return;
 	}
 
-	for (uint rowNumber = 0; rowNumber < numberOfRows; rowNumber++)
-	{
-		delete[] values[rowNumber];
-	}
-	delete[] values;
+	delete values;
 }

@@ -3,13 +3,16 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <vector>
+
 #include "util.h"
 
 using namespace std;
 
+
 class Matrix {
 private:
-	double** values;
+	vector<vector<double>>* values;
 
 	const uint numberOfRows;
 	const uint numberOfColumns;
@@ -17,7 +20,7 @@ private:
 	void initRandom(uint numberOfRows, uint numberOfColumns);
 public:
 	Matrix(uint numberOfRows = 0U, uint numberOfColumns = 0U);
-	Matrix(double** values, uint numberOfRows = 0U, uint numberOfColumns = 0U);
+	Matrix(vector<vector<double>>* values, uint numberOfRows = 0U, uint numberOfColumns = 0U);
 
 	uint getNumberOfRows() const;
 	uint getNumberOfColumns() const;
@@ -25,10 +28,10 @@ public:
 	double getValue(uint rowNumber, uint columnNumber) const;
 	void setValue(uint rowNumber, uint columnNumber, double value);
 
-	const double* getRowVector(uint numberOfRow) const;
-	const double* getColumnVector(uint numberOfColumn) const;
+	const vector<double>* getRowVector(uint numberOfRow) const;
+	const vector<double>* getColumnVector(uint numberOfColumn) const;
 
-	double** transposeValues();
+	vector<vector<double>>* transposeValues();
 	Matrix* multiply(double number);
 
 	static bool sizecmp(Matrix* a, Matrix* b);

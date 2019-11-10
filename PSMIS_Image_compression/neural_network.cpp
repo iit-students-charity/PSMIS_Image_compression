@@ -4,10 +4,11 @@
 #include "neural_network.h"
 
 
-NeuralNetwork::NeuralNetwork(Image* image, double e)
+NeuralNetwork::NeuralNetwork(Image* image, double e, uint hiddenNeuronsNumber)
 {
-	N = image->getN() * image->getM() * 3;
+	N = image->getN() * image->getM() * 3; 
 	this->e = e;
+	this->hiddenNeuronsNumber = hiddenNeuronsNumber;
 
 	this->inputImage = image;
 }
@@ -15,7 +16,7 @@ NeuralNetwork::NeuralNetwork(Image* image, double e)
 void NeuralNetwork::run()
 {
 	uint L = inputImage->getTempHeight() * inputImage->getTempWidth();
-	double Z = (N * L) / (double)((N + L) * inputImage->getP() + 2);
+	double Z = (N * L) / (double)((N + L) * hiddenNeuronsNumber + 2);
 
 	int I = compress();
 	restore(); 
@@ -59,7 +60,7 @@ double NeuralNetwork::calculateError(Matrix* deltaX, int length)
 
 int NeuralNetwork::compress()
 {
-	W = new Matrix(N, inputImage->getP());
+	W = new Matrix(N, hiddenNeuronsNumber);
 	W_ = new Matrix(
 		W->transposeValues(),
 		W->getNumberOfColumns(),

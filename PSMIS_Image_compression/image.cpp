@@ -5,9 +5,8 @@
 #include "util.h"
 
 
-Image::Image(uint p, uint n, uint m)
+Image::Image(uint n, uint m)
 {
-	this->hiddenNeuronsNumber = p;
 	this->snippetWidth = n;
 	this->snippetHeight = m;
 
@@ -19,7 +18,7 @@ Image::Image(uint p, uint n, uint m)
 	compressionIterationNumber = 0;
 }
 
-Image::Image(uint p, uint n, uint m, const char* path) : Image(p, n, m)
+Image::Image(uint n, uint m, const char* path) : Image(n, m)
 {
 	this->path = (char*)path;
 	load(path);
@@ -37,11 +36,6 @@ uint Image::getN() const
 uint Image::getM() const
 {
 	return snippetHeight;
-}
-
-uint Image::getP() const
-{
-	return hiddenNeuronsNumber;
 }
 
 uint Image::getTempWidth() const
@@ -114,9 +108,9 @@ void Image::initSnippets()
 						int currX = widthIndex + x;
 						int currY = heightIndex + y;
 						snippet->addPixel(
-							(*image)(currX, currY, 0, 0),
-							(*image)(currX, currY, 0, 1),
-							(*image)(currX, currY, 0, 2)
+							snippet->transformColor((*image)(currX, currY, 0, 0)),
+							snippet->transformColor((*image)(currX, currY, 0, 1)),
+							snippet->transformColor((*image)(currX, currY, 0, 2))
 						);
 					}
 					else

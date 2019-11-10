@@ -12,7 +12,6 @@
 class Image
 {
 private:
-	uint hiddenNeuronsNumber;
 	uint snippetWidth;
 	uint snippetHeight;
 
@@ -27,12 +26,11 @@ private:
 
 	void initSnippets();
 public:
-	Image(uint hiddenNeuronsNumber, uint snippetWidth, uint snippetHeight);
-	Image(uint hiddenNeuronsNumber, uint snippetWidth, uint snippetHeight, const char* path);
+	Image(uint snippetWidth, uint snippetHeight);
+	Image(uint snippetWidth, uint snippetHeight, const char* path);
 
 	uint getN() const;
 	uint getM() const;
-	uint getP() const;
 	uint getTempWidth() const;
 	uint getTempHeight() const;
 	vector<ImageSnippet*>* getSnippets() const;

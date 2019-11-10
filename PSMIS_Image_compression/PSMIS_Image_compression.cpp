@@ -46,23 +46,17 @@ int main()
 	std::cout << "Enter n (snippet height), m (snippet width) parameters: ";
 	std::cin >> n >> m;
 
-	uint p = n * 2 + 1;
-	while (p > n * 2)
-	{
-		system("cls");
-		std::cout << "Enter p (hidden layer neurons number, <= " << n * 2 << ") parameter: ";
-		std::cin >> p;
-	}
+	uint p;
+	system("cls");
+	std::cout << "Enter p (hidden layer neurons number, <= " << 2 * n * m * 3 << ") parameter: ";
+	std::cin >> p;
 
-	double e = 0.1 * p + 1;
-	while (e > 0.1 * p)
-	{
-		std::cout << "Enter e (<= " << 0.1 * p << ") parameter: ";
-		std::cin >> e;
-	}
+	double e;
+	std::cout << "Enter e parameter: ";
+	std::cin >> e;
 
-	Image* image = new Image(p, n, m, imagePath);
-	NeuralNetwork* nn = new NeuralNetwork(image, e);
+	Image* image = new Image(n, m, imagePath);
+	NeuralNetwork* nn = new NeuralNetwork(image, e, p);
 
 	nn->run();
 }

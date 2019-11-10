@@ -10,6 +10,8 @@
 class NeuralNetwork
 {
 private:
+	uint hiddenNeuronsNumber;
+
 	int N;
 
 	double e;
@@ -26,9 +28,9 @@ private:
 	void restore();
 	int compress();
 public:
-	static const int ADAPTIVE_STEP_INITIAL_VALUE = 100;
+	static const int ADAPTIVE_STEP_INITIAL_VALUE = 0.01;
 
-	NeuralNetwork(Image* image, double e);
+	NeuralNetwork(Image* image, double e, uint hiddenNeuronsNumber);
 	
 	void run();
 	
