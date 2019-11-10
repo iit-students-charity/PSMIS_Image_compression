@@ -21,7 +21,7 @@ void NeuralNetwork::run()
 	int I = compress();
 	restore(); 
 
-	std::cout << "L: " << L << ". Z: " << Z << ". I: " << I << ". Adaptive step: " << adaptiveLearningRate;
+	std::cout << "L: " << L << ". Z: " << Z << ". I: " << I << ". Adaptive step: " << learningRate;
 }
 
 double NeuralNetwork::calculateAdaptiveLearningRate(Matrix const* base)
@@ -57,14 +57,14 @@ Matrix* NeuralNetwork::prepareWeights(double learningRate_, Matrix* transposedY,
 
 double NeuralNetwork::calculateError(Matrix const* deltaX)
 {
-	double e = 0.;
+	double error = 0.;
 
 	for (int i = 0; i < deltaX->getNumberOfColumns(); i++)
 	{
-		e += deltaX->getValue(0, i) * deltaX->getValue(0, i);
+		error += deltaX->getValue(0, i) * deltaX->getValue(0, i);
 	}
 
-	return e;
+	return error;
 }
 
 int NeuralNetwork::compress()
@@ -78,7 +78,7 @@ int NeuralNetwork::compress()
 
 	Matrix* deltaX;
 
-	double adaptiveLearningRate_;
+	double learningRate_;
 	uint iteration = 0;
 	double E = std::numeric_limits<double>::max();
 
@@ -105,11 +105,11 @@ int NeuralNetwork::compress()
 				Y->getNumberOfRows()
 			);
 
-			adaptiveLearningRate = calculateAdaptiveLearningRate(X);
-			adaptiveLearningRate_ = calculateAdaptiveLearningRate(Y);
+			learningRate = calculateAdaptiveLearningRate(X);
+			learningRate_ = calculateAdaptiveLearningRate(Y);
 
 			Matrix* preparedWeightsW = prepareWeights(
-				adaptiveLearningRate, transposedX, deltaX,
+				learningRate, transposedX, deltaX,
 				new Matrix(
 					W_->transposeValues(),
 					W_->getNumberOfColumns(),
@@ -117,7 +117,7 @@ int NeuralNetwork::compress()
 				)
 			);
 			Matrix* preparedWeightsW_ = prepareWeights(
-				adaptiveLearningRate_,
+				learningRate_,
 				transposedY,
 				deltaX
 			);

@@ -15,7 +15,7 @@ private:
 	int N;
 
 	double e;
-	double adaptiveLearningRate;
+	double learningRate;
 
 	Matrix* X;
 	Matrix* X_;
