@@ -21,7 +21,7 @@ private:
 	cimg_library::CImg<uchar>* image;
 	vector<ImageSnippet*>* snippets;
 
-	char* path;
+	char* rawPath;
 	uint compressionIterationNumber = 0;
 
 	void initSnippets();
@@ -40,6 +40,7 @@ public:
 	uint getHeight() const;
 	void setColor(uint x, uint y, int* color);
 
+	cimg_library::CImg<uchar>* getRaw();
 	void load(const char* path);
 	void save();
 

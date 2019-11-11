@@ -11,7 +11,7 @@ Image::Image(uint n, uint m)
 	this->snippetHeight = m;
 
 	image = new cimg_library::CImg<uchar>();
-	path = nullptr;
+	rawPath = nullptr;
 	tempHeight = tempWidth = 0;
 	snippets = nullptr;
 
@@ -20,7 +20,7 @@ Image::Image(uint n, uint m)
 
 Image::Image(uint n, uint m, const char* path) : Image(n, m)
 {
-	this->path = (char*)path;
+	this->rawPath = (char*)path;
 	load(path);
 	tempWidth = image->width() / m;
 	tempHeight = image->height() / n;
@@ -75,6 +75,11 @@ void Image::setColor(uint x, uint y, int* color)
 	(*image)(x, y, 2) = color[2];
 }
 
+cimg_library::CImg<uchar>* Image::getRaw()
+{
+	return image;
+}
+
 void Image::load(const char* path)
 {
 	image->load(path);
@@ -82,7 +87,7 @@ void Image::load(const char* path)
 
 void Image::save()
 {
-	image->save(path, 1, 1);
+	image->save(rawPath, 1, 1);
 }
 
 void Image::initSnippets()
@@ -133,5 +138,5 @@ Image::~Image()
 	delete image;
 	delete[] snippets;
 
-	delete[] path;
+	delete[] rawPath;
 }
