@@ -20,8 +20,14 @@ Image::Image(uint n, uint m)
 
 Image::Image(uint n, uint m, const char* path) : Image(n, m)
 {
-	this->rawPath = (char*)path;
-	load(path);
+	this->rawPath = nullptr;
+
+	if (path != nullptr)
+	{
+		this->rawPath = (char*)path;
+		load(path);
+	}
+
 	tempWidth = image->width() / m;
 	tempHeight = image->height() / n;
 	
@@ -38,12 +44,12 @@ uint Image::getM() const
 	return snippetHeight;
 }
 
-uint Image::getTempWidth() const
+uint Image::getSnippetsHorizontalCapacity() const
 {
 	return tempWidth;
 }
 
-uint Image::getTempHeight() const
+uint Image::getSnippetsVerticalCapacity() const
 {
 	return tempHeight;
 }
@@ -78,6 +84,19 @@ void Image::setColor(uint x, uint y, int* color)
 cimg_library::CImg<uchar>* Image::getRaw()
 {
 	return image;
+}
+
+void Image::update(const char* path)
+{
+	image->clear();
+
+	rawPath = (char*)path;
+	image->load(path);
+
+	tempWidth = image->width() / snippetWidth;
+	tempHeight = image->height() / snippetHeight;
+
+	initSnippets();
 }
 
 void Image::load(const char* path)

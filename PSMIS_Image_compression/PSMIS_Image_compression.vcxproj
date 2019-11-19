@@ -156,12 +156,14 @@
     <ClCompile Include="neural_network.cpp" />
     <ClCompile Include="PSMIS_Image_compression.cpp" />
     <ClCompile Include="image_snippet.cpp" />
+    <ClCompile Include="tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="neural_network.h" />
     <ClInclude Include="image_snippet.h" />
+    <ClInclude Include="tests.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

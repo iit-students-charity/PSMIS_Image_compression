@@ -31,8 +31,8 @@ public:
 
 	uint getN() const;
 	uint getM() const;
-	uint getTempWidth() const;
-	uint getTempHeight() const;
+	uint getSnippetsHorizontalCapacity() const;
+	uint getSnippetsVerticalCapacity() const;
 	vector<ImageSnippet*>* getSnippets() const;
 	
 	uint getSnippetsNumber() const;
@@ -41,6 +41,7 @@ public:
 	void setColor(uint x, uint y, int* color);
 
 	cimg_library::CImg<uchar>* getRaw();
+	void update(const char* path);
 	void load(const char* path);
 	void save();
 

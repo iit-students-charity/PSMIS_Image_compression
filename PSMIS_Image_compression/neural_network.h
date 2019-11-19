@@ -25,14 +25,13 @@ private:
 
 	Image* inputImage;
 
-	void restore();
 	int compress();
 public:
 	NeuralNetwork(Image* image, double e, uint hiddenNeuronsNumber);
 	
 	void run();
 	
-	static double calculateAdaptiveLearningRate(Matrix const* base);
+	static double calculateLearningRate(Matrix const* base);
 	
 	static double calculateError(Matrix const* deltaX);
 	
@@ -48,6 +47,8 @@ public:
 		Matrix* deltaX, 
 		Matrix* W_T
 	);
+
+	void restore();
 };
 
 #endif // NEURAL_NETWORK_H

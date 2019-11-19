@@ -3,11 +3,12 @@
 #include "util.h"
 #include "Image.h"
 #include "neural_network.h"
+#include "tests.h"
 
 
 int main()
 {
-	const char* rawImagePath = nullptr;
+	/*const char* rawImagePath = nullptr;
 
 	uint choise;
 	do
@@ -78,5 +79,7 @@ int main()
 	{
 		raw_disp.wait();
 		result_disp.wait();
-	}
+	}*/
+
+	run_IOnDiffImages();
 }

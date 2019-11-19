@@ -15,7 +15,7 @@ NeuralNetwork::NeuralNetwork(Image* image, double e, uint hiddenNeuronsNumber)
 
 void NeuralNetwork::run()
 {
-	uint L = inputImage->getTempHeight() * inputImage->getTempWidth();
+	uint L = inputImage->getSnippetsVerticalCapacity() * inputImage->getSnippetsHorizontalCapacity();
 	double Z = (N * L) / (double)((N + L) * hiddenNeuronsNumber + 2);
 
 	int I = compress();
@@ -25,7 +25,7 @@ void NeuralNetwork::run()
 		<< ", number of iterations (I): " << I << ", learning rate (alpha): " << learningRate;
 }
 
-double NeuralNetwork::calculateAdaptiveLearningRate(Matrix const* base)
+double NeuralNetwork::calculateLearningRate(Matrix const* base)
 {
 	double sum = 0;
 	for (int i = 0; i < base->getNumberOfColumns(); i++)
@@ -106,8 +106,8 @@ int NeuralNetwork::compress()
 				Y->getNumberOfRows()
 			);
 
-			learningRate = calculateAdaptiveLearningRate(X);
-			learningRate_ = calculateAdaptiveLearningRate(Y);
+			learningRate = calculateLearningRate(X);
+			learningRate_ = calculateLearningRate(Y);
 
 			Matrix* preparedWeightsW = calculateWeightsDifferenceMember(
 				learningRate, transposedX, deltaX,
