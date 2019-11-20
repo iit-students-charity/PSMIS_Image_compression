@@ -30,17 +30,15 @@ public:
 	NeuralNetwork(Image* image, double e, uint hiddenNeuronsNumber);
 	
 	void run();
+
+	double calculateError(Matrix const* deltaX);
 	
 	static double calculateLearningRate(Matrix const* base);
-	
-	static double calculateError(Matrix const* deltaX);
-	
 	static Matrix* calculateWeightsDifferenceMember(
 		double learningStep_T, 
 		Matrix* Y_T, 
 		Matrix* deltaX
 	);
-	
 	static Matrix* calculateWeightsDifferenceMember(
 		double learningStep, 
 		Matrix* X_T, 

@@ -84,10 +84,12 @@ int NeuralNetwork::compress()
 	double E = std::numeric_limits<double>::max();
 
 	vector<ImageSnippet*>* snippets = inputImage->getSnippets();
+	uint sizeee = 0;
 
 	while (E > e)
 	{
 		E = 0;
+
 		for (int snIndex = 0; snIndex < inputImage->getSnippetsNumber(); snIndex++)
 		{
 			X = snippets->at(snIndex)->getX0();
@@ -106,38 +108,41 @@ int NeuralNetwork::compress()
 				Y->getNumberOfRows()
 			);
 
-			learningRate = calculateLearningRate(X);
-			learningRate_ = calculateLearningRate(Y);
+			//learningRate = calculateLearningRate(X);
+			//learningRate_ = calculateLearningRate(Y);
 
-			Matrix* preparedWeightsW = calculateWeightsDifferenceMember(
-				learningRate, transposedX, deltaX,
+			Matrix* WDifferenceMember = calculateWeightsDifferenceMember(
+				0.0005, transposedX, deltaX,
 				new Matrix(
 					W_->transposeValues(),
 					W_->getNumberOfColumns(),
 					W_->getNumberOfRows()
 				)
 			);
-			Matrix* preparedWeightsW_ = calculateWeightsDifferenceMember(
-				learningRate_,
+			Matrix* W_DifferenceMember = calculateWeightsDifferenceMember(
+				0.0005,
 				transposedY,
 				deltaX
 			);
 
-			W = Matrix::subtract(W, preparedWeightsW);
-			W_ = Matrix::subtract(W_, preparedWeightsW_);
+			W = Matrix::subtract(W, WDifferenceMember);
+			W_ = Matrix::subtract(W_, W_DifferenceMember);
 			E += calculateError(deltaX);
 
 			delete transposedX;
 			delete transposedY;
 
-			delete preparedWeightsW;
-			delete preparedWeightsW_;
+			delete WDifferenceMember;
+			delete W_DifferenceMember;
 
 			delete Y;
 			delete X_;
 			delete deltaX;
+
+			sizeee += sizeof(W) + sizeof(W_);
 		}
 
+		cout << sizeof(sizeee);
 		iteration++;
 		cout << "iteration: " << iteration << ", error: " << E << '\n';
 	}

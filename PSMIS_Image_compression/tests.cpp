@@ -24,15 +24,15 @@ void run_IOnDiffImages()
 	n = 2;
 	m = 2;
 	p = n * m;
-	e = 10777.;
+	e = 2777.;
 
 	Image* image = new Image(n, m);
 
 	NeuralNetwork* nn = new NeuralNetwork(image, e, p);
 
-	//image->update(paths[0]);
+	image->update(paths[0]);
 	//image->update(paths[1]);
-	image->update(paths[2]);
+	//image->update(paths[2]);
 	//image->update(paths[3]);
 	//image->update(paths[4]);
 
@@ -41,12 +41,22 @@ void run_IOnDiffImages()
 
 void run_IOnZ()
 {
+	n = 2;
+	m = 2;
+	p = 10;
+	e = 2777.;
 
+	Image* image = new Image(n, m);
+
+	NeuralNetwork* nn = new NeuralNetwork(image, e, p);
+
+	image->update(paths[4]);
+
+	nn->run();
 }
 
 void run_IOnE()
 {
-
 }
 
 void run_IOnAlpha()

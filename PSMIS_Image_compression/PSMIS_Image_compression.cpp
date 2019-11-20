@@ -8,7 +8,7 @@
 
 int main()
 {
-	/*const char* rawImagePath = nullptr;
+	const char* rawImagePath = nullptr;
 
 	uint choise;
 	do
@@ -79,7 +79,8 @@ int main()
 	{
 		raw_disp.wait();
 		result_disp.wait();
-	}*/
+	}
 
-	run_IOnDiffImages();
+	//run_IOnDiffImages();
+	//run_IOnZ();
 }
